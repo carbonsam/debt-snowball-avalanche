@@ -5,5 +5,11 @@
   "repository": "git@github.com:carbonsam/debt-snowball-avalanche.git",
   "author": "Samuel Schumacher",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "matter-js": "^0.14.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
 }
