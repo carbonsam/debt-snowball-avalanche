@@ -1,0 +1,9 @@
+{
+  "name": "debt-snowball-avalanche",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:carbonsam/debt-snowball-avalanche.git",
+  "author": "Samuel Schumacher",
+  "license": "MIT",
+  "private": false
+}
