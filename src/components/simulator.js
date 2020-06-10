@@ -41,8 +41,8 @@ export const start = () => {
   Events.on(engine, "beforeUpdate", (event) => {
     render.bounds.min.x = snowball.bounds.min.x - 200;
     render.bounds.min.y = snowball.bounds.min.y - 200;
-    render.bounds.max.x = snowball.bounds.max.x + 600;
-    render.bounds.max.y = snowball.bounds.max.y + 400;
+    render.bounds.max.x = snowball.bounds.min.x + 600;
+    render.bounds.max.y = snowball.bounds.min.y + 400;
   });
 
   Engine.run(engine);
