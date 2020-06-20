@@ -18,8 +18,8 @@ const debts = [
     name: 'Student Loan',
     minimumPayment: 96,
     total: 10000
-  },
-]
+  }
+];
 
 // returns an array of months, containing
 //  - current extra payment
@@ -27,30 +27,34 @@ const debts = [
 //    - debt name
 //    - debt total
 export default (debts, extraPayment) => [
-    {
-      currentExtraPayment: 500,
-      paidOffDebts: [{
-          name: 'Medical Bill',
-          total: 500
-        }]
-    },
-    {
-      currentExtraPayment: 550,
-      paidOffDebts: []
-    },
-    {
-      currentExtraPayment: 550,
-      paidOffDebts: []
-    },
-    {
-      currentExtraPayment: 550,
-      paidOffDebts: []
-    },
-    {
-      currentExtraPayment: 550,
-      paidOffDebts: [{
+  {
+    currentExtraPayment: 500,
+    paidOffDebts: [
+      {
+        name: 'Medical Bill',
+        total: 500
+      }
+    ]
+  },
+  {
+    currentExtraPayment: 550,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 550,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 550,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 550,
+    paidOffDebts: [
+      {
         name: 'Credit Card',
         total: 2500
-      }]
-    },
-  ]
+      }
+    ]
+  }
+];
