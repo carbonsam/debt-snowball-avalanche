@@ -56,5 +56,103 @@ export default (debts, extraPayment) => [
         total: 2500
       }
     ]
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 613,
+    paidOffDebts: [
+      {
+        name: 'Car',
+        total: 7000
+      }
+    ]
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: []
+  },
+  {
+    currentExtraPayment: 748,
+    paidOffDebts: [
+      {
+        name: 'Student Loan',
+        total: 10000
+      }
+    ]
   }
 ];

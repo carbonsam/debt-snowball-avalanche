@@ -1,4 +1,5 @@
 import {
+  Body,
   Bodies,
   Bounds,
   Engine,
@@ -9,18 +10,48 @@ import {
 } from 'matter-js';
 import debtPayoff from '../models/debtPayoff';
 
-const startX = 0;
+let currentUpdate = 0;
+let currentMonthIndex = 0;
+let debtPayoffCalendar;
+const snowballStartingSize = 20;
+const startX = 100;
 const startY = 400;
-const monthHillLength = 200;
+const monthHillLength = snowballStartingSize * 5;
 
-const snowball = Bodies.circle(startX + 40, 200, 40);
+const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
+  render: {
+    sprite: {
+      texture: './images/snowball_small.png'
+    }
+  }
+});
 let hill = [];
 
+const getSnowballScale = () => {
+  const startingPayment = debtPayoffCalendar[0].currentExtraPayment;
+  const finalPayment =
+    debtPayoffCalendar[debtPayoffCalendar.length - 1].currentExtraPayment;
+  const previousMonthPayment =
+    debtPayoffCalendar[currentMonthIndex - 1].currentExtraPayment;
+  const currentMonthPayment =
+    debtPayoffCalendar[currentMonthIndex].currentExtraPayment;
+
+  const currentScale =
+    (currentMonthPayment - startingPayment) / (finalPayment - startingPayment) +
+    1;
+  const previousScale =
+    (previousMonthPayment - startingPayment) /
+      (finalPayment - startingPayment) +
+    1;
+
+  return currentScale - previousScale + 1;
+};
+
 const setup = () => {
-  const debtPayoffCalendar = debtPayoff();
+  debtPayoffCalendar = debtPayoff();
   const hillSize = monthHillLength * debtPayoffCalendar.length;
 
-  hill = Bodies.rectangle(startX + hillSize / 2, startY, hillSize, 50, {
+  hill = Bodies.rectangle(hillSize / 2, hillSize / 2, hillSize, 50, {
     isStatic: true,
     angle: 0.3
   });
@@ -48,13 +79,35 @@ export const start = () => {
     }
   });
 
-  World.add(engine.world, [hill, snowball]);
-
-  Events.on(engine, 'beforeUpdate', (event) => {
+  const followSnowball = () => {
     render.bounds.min.x = snowball.bounds.min.x - 200;
     render.bounds.min.y = snowball.bounds.min.y - 200;
     render.bounds.max.x = snowball.bounds.min.x + 600;
     render.bounds.max.y = snowball.bounds.min.y + 400;
+  };
+
+  const updateSimulation = () => {
+    currentUpdate++;
+
+    if (currentMonthIndex >= debtPayoffCalendar.length) {
+      Render.stop(render);
+    } else if (currentUpdate >= 60) {
+      currentMonthIndex++;
+      currentUpdate = 0;
+
+      const scale = getSnowballScale();
+
+      Body.scale(snowball, scale, scale);
+      snowball.render.sprite.xScale = scale;
+      snowball.render.sprite.yScale = scale;
+    }
+  };
+
+  World.add(engine.world, [hill, snowball]);
+
+  Events.on(engine, 'beforeUpdate', () => {
+    followSnowball();
+    updateSimulation();
   });
 
   Engine.run(engine);
