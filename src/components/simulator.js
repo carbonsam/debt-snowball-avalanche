@@ -20,10 +20,14 @@ const startX = 100;
 const startY = 400;
 const monthHillLength = snowballStartingSize * 5;
 
+let spriteScale = 0.02;
+
 const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
   render: {
     sprite: {
-      texture: './images/snowball_small.png'
+      texture: './images/snowball.png',
+      xScale: spriteScale,
+      yScale: spriteScale
     }
   }
 });
@@ -80,10 +84,11 @@ export const start = () => {
       currentUpdate = 0;
 
       const scale = getSnowballScale(debtPayoffCalendar, currentMonthIndex);
+      spriteScale *= scale;
 
       Body.scale(snowball, scale, scale);
-      snowball.render.sprite.xScale = scale;
-      snowball.render.sprite.yScale = scale;
+      snowball.render.sprite.xScale = spriteScale;
+      snowball.render.sprite.yScale = spriteScale;
     }
   };
 
