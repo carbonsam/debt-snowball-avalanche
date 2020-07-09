@@ -28,21 +28,20 @@ const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
 let hill = [];
 
 const getSnowballScale = () => {
-  const startingPayment = debtPayoffCalendar[0].currentExtraPayment;
-  const finalPayment =
-    debtPayoffCalendar[debtPayoffCalendar.length - 1].currentExtraPayment;
-  const previousMonthPayment =
-    debtPayoffCalendar[currentMonthIndex - 1].currentExtraPayment;
-  const currentMonthPayment =
-    debtPayoffCalendar[currentMonthIndex].currentExtraPayment;
+  const startingMonth = debtPayoffCalendar[0];
+  const startingPayment = startingMonth.currentExtraPayment;
 
-  const currentScale =
-    (currentMonthPayment - startingPayment) / (finalPayment - startingPayment) +
-    1;
-  const previousScale =
-    (previousMonthPayment - startingPayment) /
-      (finalPayment - startingPayment) +
-    1;
+  const finalMonth = debtPayoffCalendar[debtPayoffCalendar.length - 1];
+  const finalPayment = finalMonth.currentExtraPayment;
+
+  const getMonthScale = ({ currentExtraPayment: payment }) =>
+    (payment - startingPayment) / (finalPayment - startingPayment) + 1;
+
+  const currentMonth = debtPayoffCalendar[currentMonthIndex] || finalMonth;
+  const previousMonth = debtPayoffCalendar[currentMonthIndex - 1];
+
+  const currentScale = getMonthScale(currentMonth);
+  const previousScale = getMonthScale(previousMonth);
 
   return currentScale - previousScale + 1;
 };
