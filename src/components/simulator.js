@@ -5,10 +5,12 @@ import {
   Engine,
   Events,
   Render,
+  Runner,
   Vertices,
   World
 } from 'matter-js';
 import debtPayoff from '../models/debtPayoff';
+import getSnowballScale from './getSnowballScale';
 
 let currentUpdate = 0;
 let currentMonthIndex = 0;
@@ -26,25 +28,6 @@ const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
   }
 });
 let hill = [];
-
-const getSnowballScale = () => {
-  const startingMonth = debtPayoffCalendar[0];
-  const startingPayment = startingMonth.currentExtraPayment;
-
-  const finalMonth = debtPayoffCalendar[debtPayoffCalendar.length - 1];
-  const finalPayment = finalMonth.currentExtraPayment;
-
-  const getMonthScale = ({ currentExtraPayment: payment }) =>
-    (payment - startingPayment) / (finalPayment - startingPayment) + 1;
-
-  const currentMonth = debtPayoffCalendar[currentMonthIndex] || finalMonth;
-  const previousMonth = debtPayoffCalendar[currentMonthIndex - 1];
-
-  const currentScale = getMonthScale(currentMonth);
-  const previousScale = getMonthScale(previousMonth);
-
-  return currentScale - previousScale + 1;
-};
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
@@ -65,6 +48,7 @@ export const start = () => {
   ]);
   const bounds = Bounds.create(vertices);
   const engine = Engine.create();
+  let runner;
   const render = Render.create({
     bounds,
     element: document.getElementById('PhysicsWorld'),
@@ -90,11 +74,12 @@ export const start = () => {
 
     if (currentMonthIndex >= debtPayoffCalendar.length) {
       Render.stop(render);
+      Runner.stop(runner);
     } else if (currentUpdate >= 60) {
       currentMonthIndex++;
       currentUpdate = 0;
 
-      const scale = getSnowballScale();
+      const scale = getSnowballScale(debtPayoffCalendar, currentMonthIndex);
 
       Body.scale(snowball, scale, scale);
       snowball.render.sprite.xScale = scale;
@@ -109,6 +94,6 @@ export const start = () => {
     updateSimulation();
   });
 
-  Engine.run(engine);
+  runner = Runner.run(engine);
   Render.run(render);
 };
