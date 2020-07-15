@@ -13,7 +13,8 @@
     "start": "yarn run build:styles && webpack-dev-server --content-base public"
   },
   "dependencies": {
-    "matter-js": "^0.14.2"
+    "matter-js": "^0.14.2",
+    "poly-decomp": "^0.3.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
