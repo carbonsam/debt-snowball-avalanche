@@ -9,8 +9,12 @@ import {
   Vertices,
   World
 } from 'matter-js';
+import decomp from 'poly-decomp';
 import debtPayoff from '../models/debtPayoff';
 import getSnowballScale from './getSnowballScale';
+import HillFactory from './HillFactory';
+
+window.decomp = decomp;
 
 let currentUpdate = 0;
 let currentMonthIndex = 0;
@@ -22,7 +26,7 @@ const monthHillLength = snowballStartingSize * 5;
 
 let spriteScale = 0.02;
 
-const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
+const snowball = Bodies.circle(startX, 0, snowballStartingSize, {
   render: {
     sprite: {
       texture: './images/snowball.png',
@@ -31,16 +35,13 @@ const snowball = Bodies.circle(startX + 40, 200, snowballStartingSize, {
     }
   }
 });
-let hill = [];
+let hill;
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
   const hillSize = monthHillLength * debtPayoffCalendar.length;
 
-  hill = Bodies.rectangle(hillSize / 2, hillSize / 2, hillSize, 50, {
-    isStatic: true,
-    angle: 0.3
-  });
+  hill = HillFactory(50, 300, debtPayoffCalendar);
 };
 
 export const start = () => {
@@ -92,7 +93,8 @@ export const start = () => {
     }
   };
 
-  World.add(engine.world, [hill, snowball]);
+  console.log(hill.milestones);
+  World.add(engine.world, [...hill.bodies, snowball]);
 
   Events.on(engine, 'beforeUpdate', () => {
     followSnowball();
