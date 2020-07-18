@@ -76,11 +76,12 @@ export const start = () => {
 
   const updateSimulation = () => {
     currentUpdate++;
+    const nextMonthIndex = currentMonthIndex + 1;
 
-    if (currentMonthIndex >= debtPayoffCalendar.length) {
+    if (!debtPayoffCalendar[nextMonthIndex]) {
       Render.stop(render);
       Runner.stop(runner);
-    } else if (currentUpdate >= 60) {
+    } else if (hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x) {
       currentMonthIndex++;
       currentUpdate = 0;
 
