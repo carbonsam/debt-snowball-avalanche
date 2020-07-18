@@ -35,16 +35,5 @@ export default (x, y, debtPayoffCalendar) => {
     )
   );
 
-  bodies.push(
-    ...milestones.map((milestone) =>
-      Bodies.fromVertices(
-        milestone.x,
-        milestone.y,
-        Vertices.fromPath([0, 0, 1, 0, 1, 1000, 0, 1000].join(' ')),
-        { isStatic: true, collisionFilter: false }
-      )
-    )
-  );
-
   return { bodies, milestones };
 };
