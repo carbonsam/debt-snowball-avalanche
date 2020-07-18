@@ -6,14 +6,15 @@ export default (x, y, debtPayoffCalendar) => {
   const segmentLength = 75;
   const segmentHeight = 50;
 
-  const milestones = debtPayoffCalendar.map(
-    (_, index) => x + segmentLength * index
-  );
+  const milestones = debtPayoffCalendar.map((_, index) => ({
+    x: x + segmentLength * index - segmentOverlap * index,
+    y: y + segmentHeight * index - segmentOverlap * index
+  }));
 
-  const bodies = milestones.map((_, index) =>
+  const bodies = milestones.map((milestone, index) =>
     Bodies.fromVertices(
-      x + segmentLength / 2 + index * segmentLength - index * segmentOverlap,
-      y + segmentHeight / 2 + index * segmentHeight - index * segmentOverlap,
+      milestone.x + segmentLength / 2,
+      milestone.y + segmentHeight / 2,
       Vertices.fromPath(
         [
           0,
