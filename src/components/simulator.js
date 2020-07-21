@@ -16,17 +16,15 @@ import HillFactory from './HillFactory';
 
 window.decomp = decomp;
 
-let currentUpdate = 0;
 let currentMonthIndex = 0;
 let debtPayoffCalendar;
 const snowballStartingSize = 20;
 const startX = 100;
-const startY = 400;
-const monthHillLength = snowballStartingSize * 5;
+const startY = 0;
 
 let spriteScale = 0.02;
 
-const snowball = Bodies.circle(startX, 0, snowballStartingSize, {
+const snowball = Bodies.circle(startX, startY, snowballStartingSize, {
   render: {
     sprite: {
       texture: './images/snowball.png',
@@ -39,7 +37,6 @@ let hill;
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
-  const hillSize = monthHillLength * debtPayoffCalendar.length;
 
   hill = HillFactory(50, 300, debtPayoffCalendar);
 };
@@ -75,14 +72,13 @@ export const start = () => {
   };
 
   const updateSimulation = () => {
-    currentUpdate++;
+    const nextMonthIndex = currentMonthIndex + 1;
 
-    if (currentMonthIndex >= debtPayoffCalendar.length) {
+    if (!debtPayoffCalendar[nextMonthIndex]) {
       Render.stop(render);
       Runner.stop(runner);
-    } else if (currentUpdate >= 60) {
+    } else if (hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x) {
       currentMonthIndex++;
-      currentUpdate = 0;
 
       const scale = getSnowballScale(debtPayoffCalendar, currentMonthIndex);
       spriteScale *= scale;

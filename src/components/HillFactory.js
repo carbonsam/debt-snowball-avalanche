@@ -3,17 +3,18 @@ import { Bodies, Vertices } from 'matter-js';
 export default (x, y, debtPayoffCalendar) => {
   const colors = ['red', 'green', 'blue'];
   const segmentOverlap = 10;
-  const segmentLength = 75;
-  const segmentHeight = 50;
+  const segmentLength = 200;
+  const segmentHeight = 125;
 
-  const milestones = debtPayoffCalendar.map(
-    (_, index) => x + segmentLength * index
-  );
+  const milestones = debtPayoffCalendar.map((_, index) => ({
+    x: x + (segmentLength - segmentOverlap) * index,
+    y: y + (segmentHeight - segmentOverlap) * index
+  }));
 
-  const bodies = milestones.map((_, index) =>
+  const bodies = milestones.map((milestone, index) =>
     Bodies.fromVertices(
-      x + segmentLength / 2 + index * segmentLength - index * segmentOverlap,
-      y + segmentHeight / 2 + index * segmentHeight - index * segmentOverlap,
+      milestone.x + segmentLength / 2,
+      milestone.y + segmentHeight / 2,
       Vertices.fromPath(
         [
           0,
