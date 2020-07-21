@@ -7,8 +7,8 @@ export default (x, y, debtPayoffCalendar) => {
   const segmentHeight = 125;
 
   const milestones = debtPayoffCalendar.map((_, index) => ({
-    x: x + segmentLength * index - segmentOverlap * index,
-    y: y + segmentHeight * index - segmentOverlap * index
+    x: x + (segmentLength - segmentOverlap) * index,
+    y: y + (segmentHeight - segmentOverlap) * index
   }));
 
   const bodies = milestones.map((milestone, index) =>
