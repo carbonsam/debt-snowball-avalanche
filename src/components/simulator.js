@@ -13,6 +13,8 @@ import decomp from 'poly-decomp';
 import debtPayoff from '../models/debtPayoff';
 import getSnowballScale from './getSnowballScale';
 import HillFactory from './HillFactory';
+import MarkerFactory from './MarkerFactory';
+import { segmentHeight, segmentLength } from '../constants';
 
 window.decomp = decomp;
 
@@ -34,11 +36,29 @@ const snowball = Bodies.circle(startX, startY, snowballStartingSize, {
   }
 });
 let hill;
+let markers;
+let finish;
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
 
   hill = HillFactory(50, 300, debtPayoffCalendar);
+  markers = MarkerFactory(hill.milestones);
+
+  console.log(hill.milestones);
+
+  finish = Bodies.rectangle(
+    hill.milestones[hill.milestones.length - 1].x + segmentLength + 500,
+    hill.milestones[hill.milestones.length - 1].y + segmentHeight,
+    1000,
+    15,
+    {
+      render: {
+        fillStyle: 'purple'
+      },
+      isStatic: true
+    }
+  );
 };
 
 export const start = () => {
@@ -75,8 +95,8 @@ export const start = () => {
     const nextMonthIndex = currentMonthIndex + 1;
 
     if (!debtPayoffCalendar[nextMonthIndex]) {
-      Render.stop(render);
-      Runner.stop(runner);
+      // Render.stop(render);
+      // Runner.stop(runner);
     } else if (hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x) {
       currentMonthIndex++;
 
@@ -89,8 +109,7 @@ export const start = () => {
     }
   };
 
-  console.log(hill.milestones);
-  World.add(engine.world, [...hill.bodies, snowball]);
+  World.add(engine.world, [...hill.bodies, ...markers, finish, snowball]);
 
   Events.on(engine, 'beforeUpdate', () => {
     followSnowball();
