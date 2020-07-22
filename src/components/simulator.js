@@ -38,6 +38,7 @@ const snowball = Bodies.circle(startX, startY, snowballStartingSize, {
 let hill;
 let markers;
 let finish;
+let debtFreeDude;
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
@@ -57,6 +58,24 @@ const setup = () => {
         fillStyle: 'purple'
       },
       isStatic: true
+    }
+  );
+
+  debtFreeDude = Bodies.rectangle(
+    hill.milestones[hill.milestones.length - 1].x + 500,
+    hill.milestones[hill.milestones.length - 1].y - 50,
+    300,
+    319,
+    {
+      isStatic: true,
+      collisionFilter: false,
+      render: {
+        sprite: {
+          texture: './images/debt_free.png',
+          xScale: 1,
+          yScale: 1
+        }
+      }
     }
   );
 };
@@ -94,10 +113,10 @@ export const start = () => {
   const updateSimulation = () => {
     const nextMonthIndex = currentMonthIndex + 1;
 
-    if (!debtPayoffCalendar[nextMonthIndex]) {
-      // Render.stop(render);
-      // Runner.stop(runner);
-    } else if (hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x) {
+    if (
+      hill.milestones[nextMonthIndex] &&
+      hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x
+    ) {
       currentMonthIndex++;
 
       const scale = getSnowballScale(debtPayoffCalendar, currentMonthIndex);
@@ -109,7 +128,13 @@ export const start = () => {
     }
   };
 
-  World.add(engine.world, [...hill.bodies, ...markers, finish, snowball]);
+  World.add(engine.world, [
+    ...hill.bodies,
+    ...markers,
+    finish,
+    debtFreeDude,
+    snowball
+  ]);
 
   Events.on(engine, 'beforeUpdate', () => {
     followSnowball();

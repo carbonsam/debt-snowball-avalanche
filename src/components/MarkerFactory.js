@@ -5,10 +5,23 @@ export default (milestones) =>
   milestones
     .map(({ x, y, paidOffDebts }) => {
       if (paidOffDebts.length > 0) {
-        return Bodies.circle(x + segmentLength, y + segmentHeight, 20, {
-          isStatic: true,
-          render: { fillStyle: 'orange' }
-        });
+        return Bodies.rectangle(
+          x + segmentLength + 65,
+          y + segmentHeight - 100,
+          188,
+          200,
+          {
+            isStatic: true,
+            collisionFilter: false,
+            render: {
+              sprite: {
+                texture: './images/flag.png',
+                xScale: 1,
+                yScale: 1
+              }
+            }
+          }
+        );
       }
     })
     .filter(Boolean);
