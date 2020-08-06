@@ -5,15 +5,13 @@ import {
   Engine,
   Events,
   Render,
-  Runner,
   Vertices,
   World
 } from 'matter-js';
 import decomp from 'poly-decomp';
 import debtPayoff from '../models/debtPayoff';
 import getSnowballScale from './getSnowballScale';
-import HillFactory from './HillFactory';
-import MarkerFactory from './MarkerFactory';
+import LandscapeFactory from '../factories/LandscapeFactory';
 import { segmentHeight, segmentLength } from '../constants';
 
 window.decomp = decomp;
@@ -24,7 +22,7 @@ const snowballStartingSize = 20;
 const startX = 100;
 const startY = 0;
 
-let spriteScale = 0.02;
+const spriteScale = 0.02;
 
 const snowball = Bodies.circle(startX, startY, snowballStartingSize, {
   render: {
@@ -35,35 +33,34 @@ const snowball = Bodies.circle(startX, startY, snowballStartingSize, {
     }
   }
 });
+let landscape;
 let hill;
 let markers;
+let milestones;
 let finish;
 let debtFreeDude;
 
 const setup = () => {
   debtPayoffCalendar = debtPayoff();
 
-  hill = HillFactory(50, 300, debtPayoffCalendar);
-  markers = MarkerFactory(hill.milestones);
+  landscape = LandscapeFactory(debtPayoffCalendar);
+  hill = landscape.hill;
+  markers = landscape.markers;
+  milestones = landscape.milestones;
 
-  console.log(hill.milestones);
+  console.log(landscape);
 
   finish = Bodies.rectangle(
-    hill.milestones[hill.milestones.length - 1].x + segmentLength + 500,
-    hill.milestones[hill.milestones.length - 1].y + segmentHeight,
+    milestones[milestones.length - 1].x + segmentLength + 500,
+    milestones[milestones.length - 1].y + segmentHeight,
     1000,
     15,
-    {
-      render: {
-        fillStyle: 'purple'
-      },
-      isStatic: true
-    }
+    { render: { fillStyle: 'purple' }, isStatic: true }
   );
 
   debtFreeDude = Bodies.rectangle(
-    hill.milestones[hill.milestones.length - 1].x + 500,
-    hill.milestones[hill.milestones.length - 1].y - 50,
+    milestones[milestones.length - 1].x + 500,
+    milestones[milestones.length - 1].y - 50,
     300,
     319,
     {
@@ -89,7 +86,6 @@ export const start = () => {
   ]);
   const bounds = Bounds.create(vertices);
   const engine = Engine.create();
-  let runner;
   const render = Render.create({
     bounds,
     element: document.getElementById('PhysicsWorld'),
@@ -111,25 +107,21 @@ export const start = () => {
   };
 
   const updateSimulation = () => {
-    const nextMonthIndex = currentMonthIndex + 1;
+    const nextMilestones = milestones[currentMonthIndex + 1];
 
-    if (
-      hill.milestones[nextMonthIndex] &&
-      hill.milestones[nextMonthIndex].x <= snowball.bounds.min.x
-    ) {
+    if (nextMilestones && nextMilestones.x <= snowball.bounds.min.x) {
       currentMonthIndex++;
 
       const scale = getSnowballScale(debtPayoffCalendar, currentMonthIndex);
-      spriteScale *= scale;
 
       Body.scale(snowball, scale, scale);
-      snowball.render.sprite.xScale = spriteScale;
-      snowball.render.sprite.yScale = spriteScale;
+      snowball.render.sprite.xScale *= scale;
+      snowball.render.sprite.yScale *= scale;
     }
   };
 
   World.add(engine.world, [
-    ...hill.bodies,
+    ...hill,
     ...markers,
     finish,
     debtFreeDude,
@@ -141,6 +133,6 @@ export const start = () => {
     updateSimulation();
   });
 
-  runner = Runner.run(engine);
+  Engine.run(engine);
   Render.run(render);
 };
