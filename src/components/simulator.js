@@ -75,6 +75,23 @@ const setup = () => {
   );
 };
 
+const getTotalDebtPaidOff = () => {
+  let debtPaidOff = 0;
+
+  for (let i = 0; i < currentMonthIndex; i++) {
+    debtPaidOff += debtPayoffCalendar[currentMonthIndex].currentExtraPayment;
+  }
+
+  return debtPaidOff;
+};
+
+const drawText = (text, x, y) => {
+  const canvas = document.querySelector('canvas').getContext('2d');
+  canvas.font = '18px sans-serif';
+  canvas.fillStyle = 'black';
+  canvas.fillText(text, x, y);
+};
+
 export const start = () => {
   setup();
 
@@ -129,6 +146,16 @@ export const start = () => {
   Events.on(engine, 'beforeUpdate', () => {
     followSnowball();
     updateSimulation();
+  });
+
+  Events.on(render, 'afterRender', () => {
+    drawText(
+      `Current Extra Payment: $${debtPayoffCalendar[currentMonthIndex].currentExtraPayment}`,
+      8,
+      24
+    );
+    drawText(`Debt Paid Off: $${getTotalDebtPaidOff()}`, 8, 48);
+    drawText(`Months: ${currentMonthIndex}`, 8, 72);
   });
 
   Engine.run(engine);
