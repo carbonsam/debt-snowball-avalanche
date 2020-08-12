@@ -48,14 +48,12 @@ const setup = () => {
   markers = landscape.markers;
   milestones = landscape.milestones;
 
-  console.log(landscape);
-
   finish = Bodies.rectangle(
     milestones[milestones.length - 1].x + segmentLength + 500,
-    milestones[milestones.length - 1].y + segmentHeight,
+    milestones[milestones.length - 1].y + segmentHeight + 500,
     1000,
-    15,
-    { render: { fillStyle: 'purple' }, isStatic: true }
+    1000,
+    { render: { fillStyle: '#e8eced' }, isStatic: true }
   );
 
   debtFreeDude = Bodies.rectangle(
@@ -122,8 +120,8 @@ export const start = () => {
 
   World.add(engine.world, [
     ...hill,
-    ...markers,
     finish,
+    ...markers,
     debtFreeDude,
     snowball
   ]);
