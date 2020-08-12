@@ -1,7 +1,6 @@
 import { Bodies, Vertices } from 'matter-js';
 import { segmentHeight, segmentLength, segmentOverlap } from '../constants';
 
-const colors = ['red', 'green', 'blue'];
 const segment = Vertices.fromPath(
   [
     0,
@@ -19,10 +18,35 @@ const segment = Vertices.fromPath(
   ].join(' ')
 );
 
-export default (milestones) =>
-  milestones.map(({ x, y }, index) =>
+const backgroundSegment = Vertices.fromPath(
+  [
+    0,
+    0,
+    segmentLength,
+    segmentHeight,
+    segmentLength,
+    segmentHeight + 1000,
+    0,
+    1000
+  ].join(' ')
+);
+
+export default (milestones) => {
+  const segments = milestones.map(({ x, y }) =>
     Bodies.fromVertices(x + segmentLength / 2, y + segmentHeight / 2, segment, {
       isStatic: true,
-      render: { fillStyle: colors[index % colors.length] }
+      render: { fillStyle: '#e8eced' }
     })
   );
+
+  const backgroundSegments = milestones.map(({ x, y }) =>
+    Bodies.fromVertices(
+      x + segmentLength / 2,
+      y + (segmentHeight + 1000) / 2,
+      backgroundSegment,
+      { isStatic: true, render: { fillStyle: '#e8eced' } }
+    )
+  );
+
+  return backgroundSegments.concat(segments);
+};
