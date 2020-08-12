@@ -77,6 +77,13 @@ const setup = () => {
   );
 };
 
+const drawText = (text, x, y) => {
+  const canvas = document.querySelector('canvas').getContext('2d');
+  canvas.font = '18px sans-serif';
+  canvas.fillStyle = 'black';
+  canvas.fillText(text, x, y);
+};
+
 export const start = () => {
   setup();
 
@@ -131,6 +138,14 @@ export const start = () => {
   Events.on(engine, 'beforeUpdate', () => {
     followSnowball();
     updateSimulation();
+  });
+
+  Events.on(render, 'afterRender', () => {
+    drawText(
+      `Current Extra Payment: $${debtPayoffCalendar[currentMonthIndex].currentExtraPayment}`,
+      8,
+      24
+    );
   });
 
   Engine.run(engine);
