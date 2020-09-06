@@ -35,9 +35,7 @@ export default (milestones) =>
       {
         isStatic: true,
         collisionFilter: false,
-        render: {
-          sprite: { texture: './images/tree1.png' }
-        }
+        render: { sprite: { texture: './images/tree1.png' } }
       }
     );
 
@@ -50,9 +48,7 @@ export default (milestones) =>
         isStatic: true,
         collisionFilter: false,
         angle: Math.atan(segmentHeight / segmentLength), // Calculate angle in radians from slope
-        render: {
-          sprite: { texture: './images/bushes.png' }
-        }
+        render: { sprite: { texture: './images/bushes.png' } }
       }
     );
 
