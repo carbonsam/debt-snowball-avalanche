@@ -12,7 +12,7 @@ import decomp from 'poly-decomp';
 import debtPayoff from '../models/debtPayoff';
 import getSnowballScale from './getSnowballScale';
 import LandscapeFactory from '../factories/LandscapeFactory';
-import { segmentHeight, segmentLength } from '../constants';
+import { segmentHeight, segmentLength, segmentOverlap } from '../constants';
 
 window.decomp = decomp;
 
@@ -37,6 +37,7 @@ let landscape;
 let hill;
 let markers;
 let milestones;
+let top;
 let finish;
 let debtFreeDude;
 
@@ -48,8 +49,16 @@ const setup = () => {
   markers = landscape.markers;
   milestones = landscape.milestones;
 
+  top = Bodies.rectangle(
+    milestones[0].x + segmentOverlap - 500,
+    milestones[0].y + 500,
+    1000,
+    1000,
+    { render: { fillStyle: '#e8eced' }, isStatic: true }
+  );
+
   finish = Bodies.rectangle(
-    milestones[milestones.length - 1].x + segmentLength + 500,
+    milestones[milestones.length - 1].x + segmentLength + 500 - segmentOverlap,
     milestones[milestones.length - 1].y + segmentHeight + 500,
     1000,
     1000,
@@ -136,6 +145,7 @@ export const start = () => {
   };
 
   World.add(engine.world, [
+    top,
     ...hill,
     finish,
     ...markers,
