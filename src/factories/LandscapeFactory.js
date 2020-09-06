@@ -19,7 +19,7 @@ export default (debtPayoffCalendar) => {
 
   const finish = Bodies.rectangle(
     milestones[milestones.length - 1].x + segmentLength + 2500 - segmentOverlap,
-    milestones[milestones.length - 1].y + segmentHeight + 2500,
+    milestones[milestones.length - 1].y + segmentHeight + 2500 - segmentOverlap,
     5000,
     5000,
     { render: { fillStyle: '#e8eced' }, isStatic: true }
