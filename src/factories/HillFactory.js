@@ -10,11 +10,11 @@ const segment = Vertices.fromPath(
     segmentLength,
     segmentHeight - segmentOverlap,
     segmentLength,
-    segmentHeight + 1000,
+    segmentHeight + 5000,
     segmentLength - segmentOverlap,
-    segmentHeight + 1000,
+    segmentHeight + 5000,
     0,
-    segmentOverlap + 1000
+    segmentOverlap + 5000
   ].join(' ')
 );
 
@@ -22,7 +22,7 @@ export default (milestones) =>
   milestones.map(({ x, y }) =>
     Bodies.fromVertices(
       x + segmentLength / 2,
-      y + (segmentHeight + 1000) / 2,
+      y + (segmentHeight + 5000) / 2,
       segment,
       { isStatic: true, render: { fillStyle: '#e8eced' } }
     )

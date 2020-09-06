@@ -12,9 +12,11 @@ import decomp from 'poly-decomp';
 import debtPayoff from '../models/debtPayoff';
 import getSnowballScale from './getSnowballScale';
 import LandscapeFactory from '../factories/LandscapeFactory';
-import { segmentHeight, segmentLength, segmentOverlap } from '../constants';
 
 window.decomp = decomp;
+
+const windowWidth = window.innerWidth;
+const windowHeight = window.innerHeight;
 
 let currentMonthIndex = 0;
 let debtPayoffCalendar;
@@ -37,8 +39,6 @@ let landscape;
 let hill;
 let markers;
 let milestones;
-let top;
-let finish;
 let debtFreeDude;
 
 const setup = () => {
@@ -48,22 +48,6 @@ const setup = () => {
   hill = landscape.hill;
   markers = landscape.markers;
   milestones = landscape.milestones;
-
-  top = Bodies.rectangle(
-    milestones[0].x + segmentOverlap - 500,
-    milestones[0].y + 500,
-    1000,
-    1000,
-    { render: { fillStyle: '#e8eced' }, isStatic: true }
-  );
-
-  finish = Bodies.rectangle(
-    milestones[milestones.length - 1].x + segmentLength + 500 - segmentOverlap,
-    milestones[milestones.length - 1].y + segmentHeight + 500,
-    1000,
-    1000,
-    { render: { fillStyle: '#e8eced' }, isStatic: true }
-  );
 
   debtFreeDude = Bodies.rectangle(
     milestones[milestones.length - 1].x + 500,
@@ -84,11 +68,17 @@ const setup = () => {
   );
 };
 
+const resizeCanvas = () => {
+  const canvas = document.querySelector('canvas');
+  canvas.setAttribute('width', window.innerWidth);
+  canvas.setAttribute('height', window.innerHeight);
+};
+
 const getTotalDebtPaidOff = () => {
   let debtPaidOff = 0;
 
   for (let i = 0; i < currentMonthIndex; i++) {
-    debtPaidOff += debtPayoffCalendar[currentMonthIndex].currentExtraPayment;
+    debtPaidOff += debtPayoffCalendar[i].currentExtraPayment;
   }
 
   return debtPaidOff;
@@ -106,7 +96,7 @@ export const start = () => {
 
   const vertices = Vertices.create([
     { x: 0, y: 0 },
-    { x: 800, y: 600 }
+    { x: windowWidth, y: windowHeight }
   ]);
   const bounds = Bounds.create(vertices);
   const engine = Engine.create();
@@ -116,8 +106,8 @@ export const start = () => {
     engine,
     options: {
       hasBounds: true,
-      width: 800,
-      height: 600,
+      width: windowWidth,
+      height: windowHeight,
       wireframes: false,
       background: '#61d5ff'
     }
@@ -126,8 +116,8 @@ export const start = () => {
   const followSnowball = () => {
     render.bounds.min.x = snowball.bounds.min.x - 200;
     render.bounds.min.y = snowball.bounds.min.y - 200;
-    render.bounds.max.x = snowball.bounds.min.x + 600;
-    render.bounds.max.y = snowball.bounds.min.y + 400;
+    render.bounds.max.x = snowball.bounds.min.x + windowWidth - 200;
+    render.bounds.max.y = snowball.bounds.min.y + windowHeight - 200;
   };
 
   const updateSimulation = () => {
@@ -144,16 +134,10 @@ export const start = () => {
     }
   };
 
-  World.add(engine.world, [
-    top,
-    ...hill,
-    finish,
-    ...markers,
-    debtFreeDude,
-    snowball
-  ]);
+  World.add(engine.world, [...hill, ...markers, debtFreeDude, snowball]);
 
   Events.on(engine, 'beforeUpdate', () => {
+    resizeCanvas();
     followSnowball();
     updateSimulation();
   });

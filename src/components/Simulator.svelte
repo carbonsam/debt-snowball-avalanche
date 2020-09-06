@@ -1,14 +1,14 @@
 <script>
-  import { onMount } from "svelte";
-  import * as simulator from "./simulator.js";
+  import { onMount } from 'svelte';
+  import * as simulator from './simulator.js';
 
   onMount(simulator.start);
 </script>
 
 <style>
   .Simulator {
-    width: 800px;
-    height: 600px;
+    width: 100vw;
+    height: 100vh;
     background-color: #61d5ff;
   }
 </style>
