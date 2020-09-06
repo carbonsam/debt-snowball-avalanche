@@ -57,13 +57,7 @@ const setup = () => {
     {
       isStatic: true,
       collisionFilter: false,
-      render: {
-        sprite: {
-          texture: './images/debt_free.png',
-          xScale: 1,
-          yScale: 1
-        }
-      }
+      render: { sprite: { texture: './images/debt_free.png' } }
     }
   );
 };

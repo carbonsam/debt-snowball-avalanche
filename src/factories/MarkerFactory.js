@@ -5,7 +5,7 @@ export default (milestones) =>
   milestones
     .filter(({ paidOffDebts }) => paidOffDebts.length > 0)
     .map(({ x, y }) =>
-      Bodies.rectangle(x + segmentLength, y + segmentHeight, 197, 66, {
+      Bodies.rectangle(x + segmentLength, y + segmentHeight - 45, 197, 66, {
         isStatic: true,
         collisionFilter: false,
         angle: Math.atan(segmentHeight / segmentLength), // Calculate angle in radians from slope
