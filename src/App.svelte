@@ -1,5 +1,5 @@
 <script>
-  import Simulator from "./components/Simulator.svelte";
+  import Simulator from './components/Simulator.svelte';
 </script>
 
 <style>
@@ -17,6 +17,6 @@
 </style>
 
 <div class="App">
-  <h1>Debt Snowball Avalanche</h1>
+  <!-- <h1>Debt Snowball Avalanche</h1> -->
   <svelte:component this={Simulator} />
 </div>
